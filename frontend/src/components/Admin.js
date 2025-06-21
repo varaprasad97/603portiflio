@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
 const Admin = () => {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +17,7 @@ const Admin = () => {
 
   const fetchContacts = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/contact/admin/contacts');
+      const response = await axios.get(`${API_BASE_URL}/contact/admin/contacts`);
       setContacts(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -26,7 +28,7 @@ const Admin = () => {
 
   const handleStatusUpdate = async (id, newStatus) => {
     try {
-      await axios.patch(`http://localhost:5000/api/contact/admin/contacts/${id}`, {
+      await axios.patch(`${API_BASE_URL}/contact/admin/contacts/${id}`, {
         status: newStatus
       });
       setStatus({

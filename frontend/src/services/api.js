@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 export const getSummary = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/summary`);
+    const response = await axios.get(`${API_BASE_URL}/portfolio/summary`);
     return response.data;
   } catch (error) {
     console.error('Error fetching summary:', error);
@@ -14,7 +14,7 @@ export const getSummary = async () => {
 
 export const getCompetencies = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/competencies`);
+    const response = await axios.get(`${API_BASE_URL}/portfolio/competencies`);
     return response.data;
   } catch (error) {
     console.error('Error fetching competencies:', error);
@@ -24,7 +24,7 @@ export const getCompetencies = async () => {
 
 export const getProjects = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/projects`);
+    const response = await axios.get(`${API_BASE_URL}/portfolio/projects`);
     return response.data;
   } catch (error) {
     console.error('Error fetching projects:', error);
@@ -34,7 +34,7 @@ export const getProjects = async () => {
 
 export const getCertifications = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/certifications`);
+    const response = await axios.get(`${API_BASE_URL}/portfolio/certifications`);
     return response.data;
   } catch (error) {
     console.error('Error fetching certifications:', error);
@@ -44,7 +44,7 @@ export const getCertifications = async () => {
 
 export const fetchPortfolio = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/portfolio`);
+    const response = await fetch(`${API_BASE_URL}/portfolio/summary`);
     if (!response.ok) {
       throw new Error('Failed to fetch portfolio data');
     }
@@ -57,7 +57,7 @@ export const fetchPortfolio = async () => {
 
 export const submitContact = async (contactData) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/contact`, {
+    const response = await fetch(`${API_BASE_URL}/contact/submit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

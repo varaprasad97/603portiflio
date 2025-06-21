@@ -1,10 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const portfolioRoutes = require('./routes/portfolioRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const db = require('./models/portfolioModel');
 
 const app = express();
 
@@ -12,19 +12,28 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Test database connection
-db.get("SELECT 1", (err, row) => {
-  if (err) {
-    console.error('Database connection test failed:', err.message);
-  } else {
-    console.log('Database connection test successful');
-  }
+// MongoDB Connection
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/portfolio';
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  console.log('Connected to MongoDB successfully');
+})
+.catch((err) => {
+  console.error('MongoDB connection error:', err.message);
 });
 
 // Routes
-app.use('/api', portfolioRoutes);
+app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);
+
+// Basic route for testing
+app.get('/', (req, res) => {
+  res.json({ message: 'Portfolio API is running!' });
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -35,7 +44,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
